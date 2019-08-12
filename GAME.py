@@ -22,22 +22,47 @@ class Screen(object):
         length = len(pixels)
         drawn_pixels = 0 #number of pixels drawn successfully
         for i in range(0, length):
-            if self.draw_pixel(pixels[i][0], pixels[i][1], rgbs_colors[i]):
-                draw_pixels += 1
+            if self.draw_pixel(pixels[i][0], pixels[i][1], rgb_colors[i]):
+                drawn_pixels += 1
         return drawn_pixels
 
-
 class Game(object):
+
+    paddle_colors = [(255, 0, 0), (0, 255, 0)]
+    board_color = (0, 0, 0)
+
     def __init__(self, width, height, pixel_size=20):
+        #DEFAULT SETTERS
         self.width = width
         self.height = height
+        self.screen_object = Screen(width, height, pixel_size)
         self.pixel_size = pixel_size
+
+        #PADDLE SETTING MAGIC
+        self.paddle_size = max(1, int(height * 0.2))
+        temp_var1 = int((height - self.paddle_size) / 2)
+        self.paddle_positions = [(0, temp_var1), (width - 1, temp_var1)]
+
+    def move_paddle(self, paddle_n, up_down):
+        if up_down == "UP":
+            self.paddle_positions[paddle_n][1] = min(0, paddle_positions[paddle_n][1] - 1)
+        else:
+            self.paddle_positoins[paddle_n][1] = max(self.height - 1, paddle_positions[paddle_n][1] + 1)
+    def draw_paddle(self, paddle_n, rgb_color="default"):
+        if rgb_color == "default":
+            rgb_color = self.paddle_colors[paddle_n]
+        elif rgb_color == "erase":
+            rgb_color = self.board_color
+        p_n = self.paddle_positions[paddle_n]
+        t_pixels = [(p_n[0], p_n[1] + x) for x in range(0, self.paddle_size)]
+        t_colors = [rgb_color] * self.paddle_size
+        self.screen_object.draw_n_pixels(t_pixels, t_colors)
 
 
 if __name__ == "__main__":
     pygame.init()
-    a = Screen(20, 20, 20)
-    a.draw_pixel(10, 10, (255, 255, 255))
+    GAME = Game(20, 20)
+    GAME.draw_paddle(0)
     while True:
         for event in pygame.event.get():
             if event.type == QUIT:
