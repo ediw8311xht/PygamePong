@@ -128,7 +128,7 @@ if __name__ == "__main__":
     event_num = pygame.USEREVENT + 1
 
     pygame.init()
-    GAME = Game(40, 40)
+    GAME = Game(70, 70)
 
     GAME.start(event_num)
 
